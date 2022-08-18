@@ -1,11 +1,13 @@
-#this script takes two input subtitle files and copies the 1st file's timestamps into the second one, replacing the second file's timestamps
+#this script takes two input subtitle files and copies the 1st file's timestamps into the second one, replacing the second file's timestamps within a new subtitle (.srt) file.
 import sys
 import string
 import re
 
 
 '''
+the required timestamp formats for input .vtt or .srt files are:
 00:00:05.100 --> 00:00:16.040
+or
 00:00:05,100 --> 00:00:16,040
 
 '''
@@ -62,32 +64,6 @@ def print_newfile(a,b,b_fn,ext):
             except IndexError as e:
                 print(i)
                 print(e)
-            newfile.write('\n')
-'''  
-def print_to_file(filename: str, subtitles: dict, ext: str):
-    print('Printing to file')
-    with open(filename + "_new" + ext, 'w', encoding='UTF-8') as newfile:
-        if ext == '.srt':
-            for k,v in subtitles.items():
-                newfile.write(str(k))
-                newfile.write('\n')
-                try:
-                    newfile.write(v[0] + " --> " + subtitles[k+1][0])
-                except KeyError:
-                    newfile.write(v[0] + " --> " + subtitles[k][0])
-                newfile.write('\n')
-                try:
-                    [newfile.write(t+'\n') for t in v[1:]]
-                except UnicodeEncodeError as e:
-                    print(e)
-                    print('Unprintable char is in: ',v[1:])
-                                
-                newfile.write('\n')
-                newfile.write('\n')
-        elif ext == '.vtt':
-            pass
-
-'''
 
 if __name__ == "__main__":
     if len(sys.argv) == 3:
@@ -95,4 +71,4 @@ if __name__ == "__main__":
         b = str(sys.argv[-1])
         print_newfile(retrieve_timestamps(a),retrieve_text(b),b,'.srt')
     else:
-        print("2 args required: input filename 1 and input filename 2. Example: 'python convert.py input.srt input.srt'")
+        print("2 args required: input filename 1 and input filename 2. Example: 'python align.py input.srt input.srt'")
