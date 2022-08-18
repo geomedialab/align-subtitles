@@ -7,10 +7,10 @@ The script was created in the context of the [atlascine project](https://github.
 For example, given the following inputs:
 ```
 00:00:05.100 --> 00:00:06.040
-They went home
+Ils sont rentrés chez eux
 
 00:00:06.040 --> 00:00:07.088
-that day
+cette journée-là
 ```
 and
 ```
