@@ -2,7 +2,7 @@
 import sys
 import string
 import re
-
+import math
 
 '''
 the required timestamp formats for input .vtt or .srt files are:
@@ -43,7 +43,7 @@ def retrieve_text(i: str):
                     #print(k)
                     #print('\n')
                     if k == (j-1):
-                        print(k,j)
+                        #print(k,j)
                         text[-1] += line
                     else:
                         text.append(line)
@@ -52,8 +52,25 @@ def retrieve_text(i: str):
                 print('ERROR')
                 text.append(line)
     return text
+
+def redistribute_texts(a: list,b: list):
+    #if there are more timestamps than text slices, function adds an empty text chunk (a dash)
+    print(len(a)-len(b))
+    diff = len(a)-len(b)
+    rem = len(a)%len(b)
+    insertion_interval = math.floor(len(a)/diff)
+    for i in range(insertion_interval,len(a),insertion_interval):
+        #print(i)
+        b.insert(i,'-\n')
+    return a,b
+
+def print_newfile(a: list,b: list,b_fn,ext):
+    if len(a) > len(b):
+        a,b = redistribute_texts(a,b)
+    elif len(a) < len(b):
+        #write function that concatenates texts
+        pass
         
-def print_newfile(a,b,b_fn,ext):
     with open(b_fn[:-4] + "_new" + ext, 'w', encoding='UTF-8') as newfile:
         for i,t in enumerate(a):
             newfile.write(str(i+1))
@@ -61,9 +78,11 @@ def print_newfile(a,b,b_fn,ext):
             newfile.write(str(t))
             try:
                 newfile.write(str(b[i]))
+                newfile.write('\n')
             except IndexError as e:
-                print(i)
-                print(e)
+                #print(i)
+                #print(e)
+                pass
 
 if __name__ == "__main__":
     if len(sys.argv) == 3:
