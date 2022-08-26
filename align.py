@@ -55,7 +55,7 @@ def retrieve_text(i: str):
 
 def redistribute_texts(a: list,b: list):
     #if there are more timestamps than text slices, function adds an empty text chunk (a dash)
-    print(len(a)-len(b))
+    print('There are ',len(a)-len(b),' more timestamps than text slices')
     diff = len(a)-len(b)
     rem = len(a)%len(b)
     insertion_interval = math.floor(len(a)/diff)
@@ -63,13 +63,37 @@ def redistribute_texts(a: list,b: list):
         #print(i)
         b.insert(i,'-\n')
     return a,b
+    
+def concat_texts(a: list,b: list):
+    print('There are ',len(b)-len(a),' more text slices than timestamps')
+    #print(len(b)%len(a))
+    #print(len(b)/len(a))
+    #print(len(a)/(len(b)%len(a)))
+    j = 0
+    k = 0
+    b1 = []
+    for x in a:
+        try:
+            to_append = b[j] + b[j+1]
+            if k <= (len(b)%len(a)):
+                to_append += b[j+2]
+                j+=1
+                k+=1
+            b1.append(to_append)
+            j+=2
+        except IndexError as e:
+            try:
+                to_append = b[j]
+                b1.append(to_append)
+            except IndexError as e:
+                print(e)
+    return a,b1
 
 def print_newfile(a: list,b: list,b_fn,ext):
     if len(a) > len(b):
         a,b = redistribute_texts(a,b)
     elif len(a) < len(b):
-        #write function that concatenates texts
-        pass
+        a,b = concat_texts(a,b)
         
     with open(b_fn[:-4] + "_new" + ext, 'w', encoding='UTF-8') as newfile:
         for i,t in enumerate(a):
