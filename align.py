@@ -70,15 +70,13 @@ def concat_texts(a: list,b: list):
     #print(len(b)/len(a))
     #print(len(a)/(len(b)%len(a)))
     j = 0
-    k = 0
     b1 = []
-    for x in a:
+    for i,x in enumerate(a):
         try:
             to_append = b[j] + b[j+1]
-            if k <= (len(b)%len(a)):
+            if i >= (len(a) - len(b)%len(a)):
                 to_append += b[j+2]
                 j+=1
-                k+=1
             b1.append(to_append)
             j+=2
         except IndexError as e:
