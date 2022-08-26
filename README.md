@@ -1,6 +1,6 @@
 # align-subtitles
 
-This small Python script replaces the timestamps of one subtitle file with the timestamps of another in order of appearance.
+This small Python script replaces the timestamps of one subtitle file with the timestamps of another in order of appearance. If the second subtitle file has more or less subtitle units than the first, the text of the second subtitle file will be redistributed to fit the timestamps of the first.
 
 The script was created in the context of the [atlascine project](https://github.com/geomedialab/atlascine), which publishes media featuring annotated subtitles in multiple languages. In this interface, for the annotations to appear consistently across multiple subtitle language versions, timestamps must be identical.
 
