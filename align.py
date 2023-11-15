@@ -27,7 +27,7 @@ def retrieve_timestamps(i: str):
     return timestamps
     
     
-def retrieve_text(i: str):     
+def retrieve_text(i: str):
     with open(i, mode='r',encoding='UTF-8') as myfile:
         try:
             lines = myfile.readlines()
@@ -56,36 +56,46 @@ def retrieve_text(i: str):
 def redistribute_texts(a: list,b: list):
     #if there are more timestamps than text slices, function adds an empty text chunk (a dash)
     print('There are ',len(a)-len(b),' more timestamps than text slices')
-    diff = len(a)-len(b)
-    rem = len(a)%len(b)
-    insertion_interval = math.floor(len(a)/diff)
-    for i in range(insertion_interval,len(a),insertion_interval):
-        #print(i)
-        b.insert(i,'-\n')
-    return a,b
+    print('There are ',len(b),' text slices')
+    print('There are ',len(a),' timestamps')
+    j = 0
+    new_text_slices = []
+    step_size = int(len(a)/(len(a)-len(b)))+1
+    print(step_size)
+    for i,x in enumerate(a):
+        try:
+            if (i%step_size == 0):
+                to_append = '-\n'
+            else:
+                to_append = b[j]
+                j+=1
+            new_text_slices.append(to_append)
+        except Exception as e:
+            print(e)
+    return a,new_text_slices
     
 def concat_texts(a: list,b: list):
     print('There are ',len(b)-len(a),' more text slices than timestamps')
+    #print('There are ',len(b),' text slices')
+    #print('There are ',len(a),' timestamps')
     #print(len(b)%len(a))
     #print(len(b)/len(a))
     #print(len(a)/(len(b)%len(a)))
     j = 0
-    b1 = []
+    new_text_slices = []
+    step_size = int(len(a)/(len(b)-len(a)))
     for i,x in enumerate(a):
         try:
-            to_append = b[j] + b[j+1]
-            if i >= (len(a) - len(b)%len(a)):
-                to_append += b[j+2]
-                j+=1
-            b1.append(to_append)
-            j+=2
-        except IndexError as e:
-            try:
+            if (i%step_size == 0):
+                to_append = b[j] + b[j+1]
+                j+=2
+            else:
                 to_append = b[j]
-                b1.append(to_append)
-            except IndexError as e:
-                print(e)
-    return a,b1
+                j+=1
+            new_text_slices.append(to_append)
+        except Exception as e:
+            print(e)
+    return a,new_text_slices
 
 def print_newfile(a: list,b: list,b_fn,ext):
     if len(a) > len(b):
@@ -93,7 +103,7 @@ def print_newfile(a: list,b: list,b_fn,ext):
     elif len(a) < len(b):
         a,b = concat_texts(a,b)
         
-    with open(b_fn[:-4] + "_new" + ext, 'w', encoding='UTF-8') as newfile:
+    with open("new_" + b_fn[:-4] + ext, 'w', encoding='UTF-8') as newfile:
         for i,t in enumerate(a):
             newfile.write(str(i+1))
             newfile.write('\n')
