@@ -60,11 +60,11 @@ def redistribute_texts(a: list,b: list):
     print('There are ',len(a),' timestamps')
     j = 0
     new_text_slices = []
-    step_size = int(len(a)/(len(a)-len(b)))+1
+    step_size = len(a)/len(b)
     print(step_size)
     for i,x in enumerate(a):
         try:
-            if (i%step_size == 0):
+            if (i%step_size > 1):
                 to_append = '-\n'
             else:
                 to_append = b[j]
